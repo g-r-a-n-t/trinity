@@ -5,8 +5,8 @@ from eth_utils import decode_hex, encode_hex, to_dict
 
 from eth2.beacon.typing import Epoch, Gwei, Second, Slot, Version
 
-ConfigTypes = Union[Gwei, Slot, Epoch, Second, bytes, int]
-EncodedConfigTypes = Union[str, int]
+ConfigTypes = Union[Gwei, Slot, Epoch, Second, Version, bytes, int]
+EncodedConfigTypes = Union[str, int, bytes]
 
 
 @to_dict
@@ -25,6 +25,8 @@ def _decoder(
             yield field.name, Epoch(cast(int, data[field.name]))
         elif field.type is Second:
             yield field.name, Second(cast(int, data[field.name]))
+        elif field.type is Version:
+            yield field.name, Version(cast(bytes, data[field.name]))
         elif field.type is bytes:
             yield field.name, decode_hex(cast(str, data[field.name]))
         else:

@@ -7,7 +7,7 @@ from ssz.tools.parse import from_formatted_dict
 from typing_extensions import Literal
 
 from eth2.beacon.genesis import initialize_beacon_state_from_eth1
-from eth2.beacon.state_machines.forks.serenity.configs import SERENITY_CONFIG
+from eth2.beacon.state_machines.forks.serenity.configs import SERENITY_CONFIG, WITTI_CONFIG
 from eth2.beacon.state_machines.forks.skeleton_lake.configs import (
     MINIMAL_SERENITY_CONFIG,
 )
@@ -49,19 +49,19 @@ def generate_genesis_config(
 
     validator_count = eth2_config.MIN_GENESIS_ACTIVE_VALIDATOR_COUNT
     validator_key_pairs = create_key_pairs_for(validator_count)
-    deposits = create_genesis_deposits_from(
-        validator_key_pairs,
-        withdrawal_credentials_provider=mk_withdrawal_credentials_from(
-            eth2_config.BLS_WITHDRAWAL_PREFIX
-        ),
-        amount_provider=lambda _public_key: eth2_config.MAX_EFFECTIVE_BALANCE,
-    )
+    # deposits = create_genesis_deposits_from(
+    #     validator_key_pairs,
+    #     withdrawal_credentials_provider=mk_withdrawal_credentials_from(
+    #         eth2_config.BLS_WITHDRAWAL_PREFIX
+    #     ),
+    #     amount_provider=lambda _public_key: eth2_config.MAX_EFFECTIVE_BALANCE,
+    # )
     eth1_block_hash = ZERO_HASH32
     eth1_timestamp = eth2_config.MIN_GENESIS_TIME
     initial_state = initialize_beacon_state_from_eth1(
         eth1_block_hash=eth1_block_hash,
         eth1_timestamp=Timestamp(eth1_timestamp),
-        deposits=deposits,
+        deposits=(),
         config=eth2_config,
     )
 
@@ -79,4 +79,8 @@ def generate_genesis_config(
 
 
 def _get_eth2_config(profile: str) -> Eth2Config:
-    return {"minimal": MINIMAL_SERENITY_CONFIG, "mainnet": SERENITY_CONFIG}[profile]
+    return {
+        "minimal": MINIMAL_SERENITY_CONFIG,
+        "mainnet": SERENITY_CONFIG,
+        "witti": WITTI_CONFIG,
+    }[profile]

@@ -199,7 +199,7 @@ class BeaconNode:
             config.client_identifier,
             config.p2p_maddr,
             config.orchestration_profile,
-            config.preferred_nodes,
+            config.bootstrap_nodes,
         )
 
     @property
