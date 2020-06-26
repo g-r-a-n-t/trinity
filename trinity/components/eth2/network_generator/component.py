@@ -4,6 +4,8 @@ import logging
 import pathlib
 import time
 
+from eth_utils import encode_hex
+
 from eth2.genesis import generate_genesis_config, update_genesis_config_with_time
 from trinity.config import BeaconChainConfig, TrinityConfig
 from trinity.extensibility import Application
@@ -79,7 +81,7 @@ class NetworkGeneratorComponent(Application):
         else:
             output_file_path = _get_network_config_path_for(args.config_profile)
 
-        if output_file_path.exists():
+        if output_file_path.exists() and False:
             with open(output_file_path, "r") as config_file:
                 existing_genesis_config = json.load(config_file)
                 genesis_config = update_genesis_config_with_time(
@@ -97,4 +99,6 @@ class NetworkGeneratorComponent(Application):
         )
         output_file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_file_path, "w") as output_file:
+            # TODO: see if this can be cleaned up
+            genesis_config["eth2_config"]["GENESIS_FORK_VERSION"] = genesis_config["eth2_config"]["GENESIS_FORK_VERSION"].hex()
             json.dump(genesis_config, output_file)
