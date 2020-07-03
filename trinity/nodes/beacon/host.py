@@ -8,7 +8,8 @@ from libp2p.network.swarm import Swarm
 from libp2p.peer.id import ID as PeerID
 from libp2p.peer.peerinfo import PeerInfo
 from libp2p.peer.peerstore import PeerStore
-import libp2p.security.noise.transport as noise
+# import libp2p.security.noise.transport as noise
+import libp2p.security.secio.transport as secio
 from libp2p.stream_muxer.mplex.mplex import MPLEX_PROTOCOL_ID, Mplex
 from libp2p.transport.tcp.tcp import TCP
 from libp2p.transport.upgrader import TransportUpgrader
@@ -56,10 +57,11 @@ class Host(BasicHost):
         peer_store.add_key_pair(peer_id, key_pair)
 
         muxer_transports_by_protocol = {MPLEX_PROTOCOL_ID: Mplex}
-        noise_key = ed25519.create_new_key_pair()
+        # noise_key = ed25519.create_new_key_pair()
         security_transports_by_protocol = {
-            TProtocol(noise.PROTOCOL_ID): noise.Transport(
-                key_pair, noise_key.private_key
+            # TProtocol(noise.PROTOCOL_ID): noise.Transport(
+            TProtocol(secio.ID): secio.Transport(
+                key_pair
             )
         }
         upgrader = TransportUpgrader(
