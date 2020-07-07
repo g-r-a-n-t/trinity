@@ -10,12 +10,12 @@ AVAILABLE_BACKENDS = (
 )  # type: Tuple[Type[BaseBLSBackend], ...]
 
 
-DEFAULT_BACKEND = PyECCBackend  # type: Type[BaseBLSBackend]
+DEFAULT_BACKEND = NoOpBackend  # type: Type[BaseBLSBackend]
 
-try:
-    from .milagro import MilagroBackend
-
-    DEFAULT_BACKEND = MilagroBackend
-    AVAILABLE_BACKENDS += (MilagroBackend,)
-except ImportError:
-    pass
+# try:
+#     from .milagro import MilagroBackend
+#
+#     DEFAULT_BACKEND = MilagroBackend
+#     AVAILABLE_BACKENDS += (MilagroBackend,)
+# except ImportError:
+#     pass

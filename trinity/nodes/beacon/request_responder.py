@@ -269,8 +269,10 @@ class RequestResponder:
         self, stream: INetStream, range_request: BlocksByRangeRequest
     ) -> AsyncIterable[SignedBeaconBlock]:
         if range_request.count_expected_blocks() not in VALID_BLOCKS_BY_RANGE_RANGE:
+            self.logger.debug(f"not getting blocks by range  count: {range_request.count_expected_blocks()}")
             return
 
+        self.logger.debug("getting blocks by range")
         request_payload = _serialize_ssz(range_request, BlocksByRangeRequest)
 
         await _write_request(request_payload, stream)
@@ -365,12 +367,13 @@ class RequestResponder:
         remote_metadata_seq_number = _deserialize_ssz(request_data, ssz.uint64)
 
         metadata = self._metadata_provider()
-        response_payload = _serialize_ssz(metadata.seq_number, ssz.uint64)
+        response_payload = _serialize_ssz(remote_metadata_seq_number, ssz.uint64)
 
         await _write_success_response_chunk(stream, response_payload)
         await stream.close()
 
         peer_id = stream.muxed_conn.peer_id
+        self.logger.debug(f"sending ping response  seq_num: {remote_metadata_seq_number}, peer_id: {peer_id}")
         await self._peer_updater(peer_id, MetaDataSeqNumber(remote_metadata_seq_number))
 
     async def send_metadata(self, stream: INetStream) -> MetaData:

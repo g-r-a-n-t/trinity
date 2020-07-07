@@ -427,7 +427,7 @@ class BeaconNode:
         async with self._sync_requests:
             async for request in self._sync_requests:
                 async for block in self._host.get_blocks_by_range(
-                    request.peer_id, request.start_slot, request.count
+                    request.peer_id, request.start_slot, min(request.count, 5)
                 ):
                     imported = self.on_block(block)
                     if not imported:

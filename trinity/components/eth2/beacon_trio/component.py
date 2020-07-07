@@ -5,6 +5,7 @@ from typing import Iterable
 from eth_utils import to_tuple
 from multiaddr import Multiaddr
 
+from eth2.beacon.types.states import BeaconState
 from trinity.boot_info import BootInfo
 from trinity.config import BeaconAppConfig
 from trinity.constants import BEACON_TESTNET_NETWORK_ID
@@ -75,6 +76,13 @@ class BeaconNodeComponent(TrioComponent):
             "--orchestration-profile",
             help="[temporary developer option] manage several beacon nodes on one machine",
             default="a",
+        )
+
+        arg_parser.add_argument(
+            "--genesis-state",
+            type=BeaconState,
+            help="path to genesis state ssz file",
+            default=None,
         )
 
     @property
