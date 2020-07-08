@@ -744,6 +744,8 @@ class BeaconChainConfig:
         # genesis_validator_key_map = load_genesis_key_map(
         #     genesis_config["genesis_validator_key_pairs"]
         # )
+        print(f"state root: {genesis_config['genesis_state_root']}")
+
         return cls(genesis_state, eth2_config, {})
 
     @classmethod

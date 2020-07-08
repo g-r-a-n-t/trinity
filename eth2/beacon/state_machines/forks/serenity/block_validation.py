@@ -69,6 +69,7 @@ def validate_proposer_index(
     state: BeaconState, block: BaseBeaconBlock, config: Eth2Config
 ) -> None:
     expected_proposer = get_beacon_proposer_index(state, config)
+    print(f"state slot {state.slot}")
     if block.proposer_index != expected_proposer:
         raise ValidationError(
             f"block.proposer_index "

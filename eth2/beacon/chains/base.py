@@ -444,6 +444,7 @@ class BeaconChain(BaseBeaconChain):
         state = self.chaindb.get_state_by_root(
             parent_block.message.state_root, state_class
         )
+        print(f"import_block state root: {state.hash_tree_root}")
 
         state, imported_block = state_machine.apply_state_transition(
             state, block, check_proposer_signature=perform_validation

@@ -14,14 +14,14 @@ from eth2.beacon.types.states import BeaconState  # noqa: F401
 from eth2.beacon.typing import Slot
 
 from .blocks import SerenityBeaconBlock, SerenitySignedBeaconBlock
-from .configs import SERENITY_CONFIG
+from .configs import SERENITY_CONFIG, ALTONA_CONFIG
 from .states import SerenityBeaconState
 
 
 class SerenityStateMachine(BaseBeaconStateMachine):
     # fork name
     fork = "serenity"  # type: str
-    config = SERENITY_CONFIG
+    config = ALTONA_CONFIG
 
     # classes
     block_class = SerenityBeaconBlock  # type: Type[BaseBeaconBlock]
@@ -72,6 +72,7 @@ class SerenityStateMachine(BaseBeaconStateMachine):
         future_slot: Slot = None,
         check_proposer_signature: bool = True,
     ) -> Tuple[BeaconState, BaseSignedBeaconBlock]:
+        print(f"config: {self.config}")
         state = apply_state_transition(
             self.config, state, signed_block, future_slot, check_proposer_signature
         )
